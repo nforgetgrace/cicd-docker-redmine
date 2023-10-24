@@ -1,0 +1,32 @@
+version: '3.1'
+services:
+  redmine:
+    container_name: redmine
+    image: redmine
+    restart: always
+    ports:
+      - 8080:3000
+    environment:
+      REDMINE_DB_MYSQL: db
+      REDMINE_DB_PASSWORD: jaegook
+      REDMINE_DB_DATABASE: jaegook
+      REDMINE_DB_ENCODING: utf8
+      #REDMINE_NO_DB_MIGRATE: true
+    volumes:
+      - ./volumes/redmine/usr/src/redmine/files:/usr/src/redmine/files
+      - ./volumes/redmine/usr/src/redmine/plugins:/usr/src/redmine/plugins
+      - ./volumes/redmine/usr/src/redmine/public/themes:/usr/src/redmine/public/themes
+  db:
+    container_name: mariadb
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: jaegook
+      MYSQL_DATABASE: jaegook
+    ports:
+      - 3306:3306
+    volumes:
+      - ./volumes/mysql/var/lib/mysql:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
